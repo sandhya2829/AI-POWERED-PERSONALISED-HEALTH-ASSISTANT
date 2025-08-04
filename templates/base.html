@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Health Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f8fa;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar {
+      background-color: #0066cc;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 500;
+      transition: opacity 0.2s ease-in-out;
+    }
+    .navbar a:hover {
+      opacity: 0.85;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    form input, form select, form button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    form button {
+      background-color: #0066cc;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    form button:hover {
+      background-color: #004999;
+    }
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .btn-group a {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background-color: #0066cc;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .btn-group a:hover {
+      background-color: #004999;
+    }
+    p, ul {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div><strong>AI Health Assistant</strong></div>
+    <div>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'exercise_search' %}">Exercise Search</a>
+        <a href="{% url 'diet_search' %}">Diet Search</a>
+        <a href="{% url 'progress' %}">Progress</a>
+        <a href="{% url 'health_history' %}">Health History</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
