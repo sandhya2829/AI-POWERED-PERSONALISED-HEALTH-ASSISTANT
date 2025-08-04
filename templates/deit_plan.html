@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Personalized Diet Plan</h2>
+
+<!--  Voice Button on Top -->
+<div style="margin: 10px 0;">
+  <button id="voiceBtn"
+          onclick="toggleSpeech()"
+          style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold;">
+     Read Aloud
+  </button>
+</div>
+
+<!-- 🍽 Diet Plan Content -->
+<div id="diet-content" style="padding: 20px; background: #f9f9f9; border-radius: 10px; line-height: 1.6;">
+  {{ diet|safe }}
+</div>
+
+<hr>
+
+<!--  Ask Question Section -->
+<form method="post">
+  {% csrf_token %}
+  <label>Ask a question:</label>
+  <input type="text" name="chat_prompt" required>
+  <button type="submit">Ask</button>
+</form>
+
+{% if chat_response %}
+  <div style="margin-top: 20px; background: #eef; padding: 10px; border-radius: 5px;">
+    {{ chat_response|safe }}
+  </div>
+{% endif %}
+
+<hr>
+
+<!--  Navigation Tabs at Bottom -->
+<div style="margin-top: 20px;">
+  <a href="{% url 'dashboard' %}" style="text-decoration: none; padding: 10px 15px; background-color: #007bff; color: white; border-radius: 5px;">🔙 Back to Dashboard</a>
+  <a href="{% url 'diet_search' %}" style="text-decoration: none; padding: 10px 15px; background-color: #28a745; color: white; border-radius: 5px; margin-left: 10px;">🏋️‍♀️ Diet Search</a>
+</div>
+
+<!--  Speech Toggle Script -->
+<script>
+  let isSpeaking = false;
+  let utterance;
+
+  function toggleSpeech() {
+    const button = document.getElementById("voiceBtn");
+    if (!isSpeaking) {
+      const text = document.getElementById("diet-content").innerText;
+      utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      speechSynthesis.speak(utterance);
+      isSpeaking = true;
+      button.textContent = "Stop Reading";
+      button.style.backgroundColor = "#dc3545";
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        button.textContent = "Read Aloud";
+        button.style.backgroundColor = "#28a745";
+      };
+    } else {
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      button.textContent = "Read Aloud";
+      button.style.backgroundColor = "#28a745";
+    }
+  }
+</script>
+{% endblock %}
