@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 style="text-align:center;">Your Health Progress</h2>
+
+<canvas id="progressChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('progressChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ user_data_keys|safe }},
+      datasets: [
+        {
+          label: 'Normal Values',
+          data: {{ normal_data_values|safe }},
+          borderColor: 'black',
+          borderWidth: 2,
+          fill: false,
+        },
+        {
+          label: 'Your Values',
+          data: {{ user_data_values|safe }},
+          borderColor: 'red',
+          borderWidth: 2,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Comparison: Your Inputs vs Normal Values'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

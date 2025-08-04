@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="text-align: center; margin-bottom: 20px; color: #fff;">Your Health History</h2>
+
+<div style="overflow-x: auto;">
+  <table style="width: 100%; border-collapse: collapse; background-color: #1a1a1a; color: #ffffff;">
+    <thead>
+      <tr style="background-color:#333; color: #ffffff;">
+        <th style="padding: 12px; border: 1px solid #444;">Date</th>
+        <th style="padding: 12px; border: 1px solid #444;">Risk</th>
+        <th style="padding: 12px; border: 1px solid #444;">Inputs</th>
+        <th style="padding: 12px; border: 1px solid #444;">Workout Plan</th>
+        <th style="padding: 12px; border: 1px solid #444;">Diet Plan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td style="padding: 10px; border: 1px solid #444;">{{ r.submitted_at|date:"Y-m-d H:i" }}</td>
+        <td style="padding: 10px; border: 1px solid #444;">{{ r.prediction }}</td>
+        <td style="padding: 10px; border: 1px solid #444;">
+          Glucose: {{ r.glucose }}<br>
+          BP: {{ r.blood_pressure }}<br>
+          Insulin: {{ r.insulin }}<br>
+          BMI: {{ r.bmi }}<br>
+          DPF: {{ r.dpf }}<br>
+          Age: {{ r.age }}
+        </td>
+        <td style="padding: 10px; border: 1px solid #444;">
+          <details>
+            <summary style="cursor: pointer; color: white">View</summary>
+            <div style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; margin-top: 5px; color: #ffffff;">
+              {{ r.workout_plan|safe }}
+            </div>
+          </details>
+        </td>
+        <td style="padding: 10px; border: 1px solid #444;">
+          <details>
+            <summary style="cursor: pointer; color: white">View</summary>
+            <div style="max-height: 200px; overflow-y: auto; background:white; padding: 10px; margin-top: 5px; color: #ffffff;">
+              {{ r.diet_plan|safe }}
+            </div>
+          </details>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align: center; color: #ccc;">No records found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

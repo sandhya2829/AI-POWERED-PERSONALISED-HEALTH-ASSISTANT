@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Welcome to AI Personalized Health Assistant</h2>
+  {% if user.is_authenticated %}
+    <p>You're logged in. Use the navigation bar to explore the app.</p>
+  {% else %}
+    <p>Please <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a> to begin.</p>
+  {% endif %}
+{% endblock %}

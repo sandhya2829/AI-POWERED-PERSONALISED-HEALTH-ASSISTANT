@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Personalized Workout Plan</h2>
+
+<!-- 🔊 Voice Button at Top -->
+<div style="margin: 10px 0;">
+  <button id="voiceBtn"
+          onclick="toggleSpeech()"
+          style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold;">
+    🔊 Read Aloud
+  </button>
+</div>
+
+<!-- 🏋️‍♀️ Workout Content -->
+<div id="workout-content" style="padding: 20px; background: #f4faff; border-radius: 10px; line-height: 1.6;">
+  {{ workout|safe }}
+</div>
+
+<hr>
+
+<!-- 💬 Chat with Gemini -->
+<form method="post">
+  {% csrf_token %}
+  <label>Ask about your workout plan:</label>
+  <input type="text" name="chat_prompt" required>
+  <button type="submit">Ask</button>
+</form>
+
+{% if chat_response %}
+  <div style="margin-top: 20px; background: #dff0d8; padding: 10px; border-radius: 5px;">
+    {{ chat_response|safe }}
+  </div>
+{% endif %}
+
+<hr>
+
+<!-- 🧭 Navigation Tabs -->
+<div style="margin-top: 20px;">
+  <a href="{% url 'dashboard' %}" style="text-decoration: none; padding: 10px 15px; background-color: #007bff; color: white; border-radius: 5px;">🔙 Back to Dashboard</a>
+  <a href="{% url 'exercise_search' %}" style="text-decoration: none; padding: 10px 15px; background-color: #17a2b8; color: white; border-radius: 5px; margin-left: 10px;">🥗 Exercise Search</a>
+</div>
+
+<!-- 🔈 Speech Toggle Script -->
+<script>
+  let isSpeaking = false;
+  let utterance;
+
+  function toggleSpeech() {
+    const button = document.getElementById("voiceBtn");
+    if (!isSpeaking) {
+      const text = document.getElementById("workout-content").innerText;
+      utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      speechSynthesis.speak(utterance);
+      isSpeaking = true;
+      button.textContent = "🔇 Stop Reading";
+      button.style.backgroundColor = "#dc3545";
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        button.textContent = "🔊 Read Aloud";
+        button.style.backgroundColor = "#28a745";
+      };
+    } else {
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      button.textContent = "🔊 Read Aloud";
+      button.style.backgroundColor = "#28a745";
+    }
+  }
+</script>
+{% endblock %}
