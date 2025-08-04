@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to Your Health Dashboard</h1>
+  <h2>Your Diabetes Risk: {{ result }}</h2>
+
+  <div style="display: flex; gap: 20px;">
+    <form method="post" action="{% url 'diet' %}">
+      {% csrf_token %}
+      <button type="submit">View Diet Plan</button>
+    </form>
+
+    <form method="post" action="{% url 'workout' %}">
+      {% csrf_token %}
+      <button type="submit">View Workout Plan</button>
+    </form>
+  </div>
+{% endblock %}
